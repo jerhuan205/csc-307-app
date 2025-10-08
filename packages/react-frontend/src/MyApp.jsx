@@ -31,10 +31,25 @@ function MyApp() {
     }
 
     function removeOneCharacter(index) {
-        const updated = characters.filter((character, i) => {
-            return i !== index;
-        });
-        setCharacters(updated);
+        const userToDelete = characters[index];
+
+        // route to HTTP DELETE request
+        fetch(`http://localhost:8000/users/${userToDelete.id}`, {
+            method: "DELETE",
+        })
+            .then((response) => {
+                if (response.status === 204) {
+                    // update frontend only if backend confirms with 204
+                    const updated = characters.filter((_, i) => i !== index);
+                    setCharacters(updated);
+                } else if (response.status === 404) {
+                    console.warn("Resource not found.");
+                } else {
+                }
+            })
+            .catch((error) => {
+                console.error("Error deleting user:", error);
+            });
     }
 
     function updateList(person) {
