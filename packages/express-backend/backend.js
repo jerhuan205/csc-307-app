@@ -49,23 +49,28 @@ app.post("/users", (req, res) => {
 });
 
 // Finding a user by name
-const findUserByName = (name) => {
-  return users["users_list"].filter(
-    (user) => user["name"] === name
-  );
+const findUsers = (name, job) => {
+  let filtered = users["users_list"];
+
+  // Check if name and job provided
+  if (name) {
+    filtered = filtered.filter((user) => user["name"] === name);
+  }
+  if (job) {
+    filtered = filtered.filter((user) => user["job"] === job);
+  }
+  return { users_list: filtered };
 };
 
-// GET format:  ./users?name=Mac
-//              ./users
+// GET format:  ./users
+//              ./users?name=Mac
+//              ./users?name=Mac&job=Professor
 app.get("/users", (req, res) => {
   const name = req.query.name;
-  if (name != undefined) {
-    let result = findUserByName(name);
-    result = { users_list: result };
-    res.send(result);
-  } else {
-    res.send(users);
-  }
+  const job  = req.query.job;
+
+  let result = findUsers(name, job);
+  res.send(result);
 });
 
 // Finding a user by ID
