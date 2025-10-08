@@ -56,7 +56,7 @@ app.post("/users", (req, res) => {
   userToAdd.id = generateId();
 
   addUser(userToAdd);
-  res.status(201).send(); // default response code: res.status(200).send()
+  res.status(201).json(userToAdd); // default response code: res.status(200).send()
 });
 
 // Finding a user by name

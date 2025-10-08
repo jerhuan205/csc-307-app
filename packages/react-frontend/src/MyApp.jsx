@@ -42,10 +42,14 @@ function MyApp() {
             .then((response) => {
                 // Update if backend responds 201
                 if (response.status === 201) {
-                    setCharacters([...characters, person])
+                    return response.json(); // parses new user obj with the id
                 } else {
                     // Don't update the state on frontend; no changes
                 }
+            })
+            .then((newUser) => {
+                // updates the state with the new obj
+                setCharacters([...characters, person]);
             })
             .catch((error) => {
                 console.log(error);
