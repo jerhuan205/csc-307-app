@@ -19,7 +19,7 @@ function MyApp() {
     }
 
     function postUser(person) {
-        const promise = fetch("Http://localhost:8000/users", {
+        const promise = fetch("http://localhost:8000/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +39,14 @@ function MyApp() {
 
     function updateList(person) {
         postUser(person)
-            .then(() => setCharacters([...characters, person]))
+            .then((response) => {
+                // Update if backend responds 201
+                if (response.status === 201) {
+                    setCharacters([...characters, person])
+                } else {
+                    // Don't update the state on frontend; no changes
+                }
+            })
             .catch((error) => {
                 console.log(error);
             })

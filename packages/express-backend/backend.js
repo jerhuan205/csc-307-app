@@ -47,7 +47,7 @@ const addUser = (user) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
-  res.send(); // default response code: res.status(200).send()
+  res.status(201).send(); // default response code: res.status(200).send()
 });
 
 // Finding a user by name
