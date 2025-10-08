@@ -53,22 +53,23 @@ function MyApp() {
     }
 
     function updateList(person) {
-        postUser(person)
-            .then((response) => {
-                // Update if backend responds 201
-                if (response.status === 201) {
-                    return response.json(); // parses new user obj with the id
-                } else {
-                    // Don't update the state on frontend; no changes
-                }
-            })
-            .then((newUser) => {
-                // updates the state with the new obj
-                setCharacters([...characters, person]);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        fetch("http://localhost:8000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(person),
+    })
+    .then((response) => {
+        if (response.status === 201) {
+            return response.json(); // <-- parse the created user with ID
+        } else {
+            throw new Error("Failed to create user");
+        }
+    })
+    .then((newUser) => {
+        // <-- Add backend-returned object with its generated ID
+        setCharacters([...characters, newUser]);
+    })
+    .catch((error) => console.error("Error:", error));
     }
 
     // Component render
