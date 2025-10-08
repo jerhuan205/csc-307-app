@@ -38,6 +38,11 @@ const users = {
   ]
 };
 
+// Generates a simple random string for IDs like "id123"
+function generateId() {
+  return "id" + Math.random().toString(16).slice(2, 8);
+}
+
 // Adding a new user
 const addUser = (user) => {
   users["users_list"].push(user);
@@ -46,6 +51,10 @@ const addUser = (user) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
+
+  // generate random id to go alongside user
+  userToAdd.id = generateId();
+
   addUser(userToAdd);
   res.status(201).send(); // default response code: res.status(200).send()
 });
