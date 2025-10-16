@@ -15,6 +15,14 @@ export const findUserByName = (name) => {
   return User.find({ name: new RegExp(name, "i") });
 };
 
+// Find users by BOTH name and job
+export const findUserByNameAndJob = (name, job) => {
+  const query = {};
+  if (name) query.name = new RegExp(name, "i");
+  if (job) query.job = new RegExp(job, "i");
+  return User.find(query);
+};
+
 // Add a new user
 export const addUser = (userData) => {
   const user = new User(userData);

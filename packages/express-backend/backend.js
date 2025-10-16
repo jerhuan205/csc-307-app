@@ -20,10 +20,11 @@ mongoose.set("debug", true);
 
 mongoose
   .connect("mongodb://localhost:27017/users", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
   })
-  .catch((error) => console.log(error));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Adding a new user
 app.post("/users", (req, res) => {
@@ -38,13 +39,23 @@ app.post("/users", (req, res) => {
 //              ./users?name=Mac
 //              ./users?name=Mac&job=Professor
 app.get("/users", (req, res) => {
-  const name = req.query.name;
+  const { name, job } = req.query;
 
-  const query = name ? findUserByName(name) : findAllUsers();
-
-  query
-    .then((users) => res.status(200).json(users))
-    .catch((err) => res.status(500).json({ error: err.message }));
+  if (name || job) {
+    findUserByNameAndJob(name, job)
+      .then((users) => res.json(users))
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error retrieving users by name and/or job");
+      });
+  } else {
+    findAllUsers()
+      .then((users) => res.json(users))
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error retrieving users");
+      });
+  }
 });
 
 // GET id format:  ./users/zap555
