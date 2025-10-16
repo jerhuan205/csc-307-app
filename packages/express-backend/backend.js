@@ -6,6 +6,7 @@ import {
   findAllUsers,
   findUserById,
   findUserByName,
+  findUserByNameAndJob,
   addUser,
   deleteUserById
 } from "./models/user-services.js";
@@ -80,10 +81,15 @@ app.delete("/users/:id", (req, res) => {
 
   deleteUserById(id)
     .then((deletedUser) => {
-      if (deletedUser) res.status(204).send(); // success, no content
-      else res.status(404).send("User not found.");
+      if (!deletedUser) {
+        return res.status(404).send("User not found");
+      }
+      res.status(204).send();
     })
-    .catch((err) => res.status(500).json({ error: err.message }));
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error deleting user");
+    });
 });
 
 app.listen(port, () => {
