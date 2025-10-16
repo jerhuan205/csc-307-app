@@ -61,13 +61,17 @@ app.get("/users", (req, res) => {
 // GET id format:  ./users/zap555
 app.get("/users/:id", (req, res) => {
   const id = req.params.id;
-
   findUserById(id)
     .then((user) => {
-      if (user) res.status(200).json(user);
-      else res.status(404).send("User not found.");
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      res.json(user);
     })
-    .catch((err) => res.status(500).json({ error: err.message }));
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving user by ID");
+    });
 });
 
 // DELETE format: ./users/zap555
