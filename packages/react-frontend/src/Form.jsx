@@ -29,7 +29,7 @@ function Form(props) {
             <input
                 type="text"
                 name="name"
-                id="name"
+                _id="name"
                 value={person.name}
                 onChange={handleChange}
             />
@@ -37,7 +37,7 @@ function Form(props) {
             <input
                 type="text"
                 name="job"
-                id="job"
+                _id="job"
                 value={person.job}
                 onChange={handleChange}
             />

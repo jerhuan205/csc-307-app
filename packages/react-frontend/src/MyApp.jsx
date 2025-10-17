@@ -9,7 +9,7 @@ function MyApp() {
     useEffect(() => {
         fetchUsers()
             .then((res)     => res.json())
-            .then((json)    => setCharacters(json["users_list"]))
+            .then((json)    => setCharacters(json))
             .catch((error)  => { console.group(error); });
     }, [] );
 
@@ -34,7 +34,7 @@ function MyApp() {
         const userToDelete = characters[index];
 
         // route to HTTP DELETE request
-        fetch(`http://localhost:8000/users/${userToDelete.id}`, {
+        fetch(`http://localhost:8000/users/${userToDelete._id}`, {
             method: "DELETE",
         })
             .then((response) => {
